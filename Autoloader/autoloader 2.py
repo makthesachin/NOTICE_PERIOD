@@ -1,4 +1,14 @@
 # Databricks notebook source
+from pyspark.sql.functions import *
+from pyspark.sql.types import StructType,StructField,IntType,ArrayType,BooleanType,StringType
+
+df = spark.readStream.format('cloudFiles')\
+    .option('cloudFiles.format','json')\
+    .option('cloudFiles.schemaLocation','/Volumes/data_dev/autoloader/bronze/destination/schema/')\
+    .option()
+
+# COMMAND ----------
+
 # DBTITLE 1,autoloader read
 from pyspark.sql.types import StructType, StructField, ArrayType, BooleanType, LongType, StringType
 
