@@ -28,3 +28,9 @@ value_df = spark.createDataFrame(
 )
 
 value_df.show()
+value_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select *,pivot()

@@ -1,4 +1,9 @@
 # Databricks notebook source
+spark
+
+# COMMAND ----------
+
+
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("PracticeDF").getOrCreate()

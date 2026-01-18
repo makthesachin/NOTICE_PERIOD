@@ -53,3 +53,30 @@ emp_skill_df = spark.createDataFrame(
 
 emp_skill_df.show(truncate=False)
 
+
+# COMMAND ----------
+
+from pyspark.sql.functions import collect_list, concat_ws
+
+dfgroup = emp_skill_df.groupBy('EmpName').agg(concat_ws(",",collect_list('skills')).alias('skills_club'))
+dfgroup.show(truncate=False)
+
+# COMMAND ----------
+
+from pyspark.sql.functions import *
+from pyspark.sql.functions import collect_list, concat_ws
+
+dfgroup = emp_skill_df.groupBy('EmpName').agg(concat_ws(",",collect_list('skills')).alias('skills_club'))
+dfgroup.show(truncate=False)
+
+# COMMAND ----------
+
+from pyspark.sql.functions import *
+from pyspark.sql.functions import collect_list, concat_ws
+
+dfgroup = emp_skill_df.groupBy('EmpName',"EmpId").agg(collect_list('skills')).alias('skills_club')
+dfgroup.show(truncate=False)
+
+# COMMAND ----------
+
+
