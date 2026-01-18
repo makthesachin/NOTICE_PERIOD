@@ -23,6 +23,12 @@ sales_data = [
 sales_df = spark.createDataFrame(sales_data)
 sales_df.printSchema()
 sales_df.show()
+sales_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot(sum(amount) for month in ('Jan', 'Feb', 'Mar'))
 
 # COMMAND ----------
 
@@ -51,6 +57,12 @@ sales_data = [
 sales_df = spark.createDataFrame(sales_data)
 sales_df.printSchema()
 sales_df.show()
+sales_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot(sum(amount) for month in ('Jan','Feb'))
 
 # COMMAND ----------
 
@@ -78,6 +90,12 @@ emp_data = [
 emp_df = spark.createDataFrame(emp_data)
 emp_df.printSchema()
 emp_df.show()
+emp_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot( sum (salary) FOR dept in ('IT','HR'))
 
 # COMMAND ----------
 
@@ -104,10 +122,18 @@ marks_data = [
 marks_df = spark.createDataFrame(marks_data)
 marks_df.printSchema()
 marks_df.show()
+marks_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot(sum (marks) for subject in ('Math','Science'))
 
 # COMMAND ----------
 
 # DBTITLE 1,Attendance Pivot (Missing Values)
+from pyspark.sql import Row
+
 # | emp | day | status |
 # | --- | --- | ------ |
 # | E1  | Mon | P      |
@@ -128,6 +154,17 @@ attendance_data = [
 attendance_df = spark.createDataFrame(attendance_data)
 attendance_df.printSchema()
 attendance_df.show()
+attendance_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot( first(status) for day in ('Mon','Tue'))
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM df PIVOT ( FIRST(status) FOR day IN ('Mon','Tue'))
 
 # COMMAND ----------
 
@@ -156,6 +193,12 @@ revenue_data = [
 revenue_df = spark.createDataFrame(revenue_data)
 revenue_df.printSchema()
 revenue_df.show()
+revenue_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot( sum(amount) for month in ('Jan','Feb'))
 
 # COMMAND ----------
 
@@ -181,3 +224,13 @@ sales_data = [
 sales_df = spark.createDataFrame(sales_data)
 sales_df.printSchema()
 sales_df.show()
+sales_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot(sum(amount) for month in ('Jan','Feb','Mar'))
+
+# COMMAND ----------
+
+
