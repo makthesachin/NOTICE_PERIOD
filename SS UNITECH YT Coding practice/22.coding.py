@@ -41,8 +41,3 @@ inner.show()
 
 left=table_a_df.join(table_b_df,table_a_df.id==table_b_df.id,'left')
 left.show()
-
-# COMMAND ----------
-
-union = table_a_df.union(table_b_df)
-union.show()

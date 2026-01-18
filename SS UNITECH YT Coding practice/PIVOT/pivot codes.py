@@ -228,9 +228,19 @@ sales_df.createOrReplaceTempView('df')
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC select * from df pivot(sum(amount) for month in ('Jan','Feb','Mar'))
+from pyspark.sql.functions import sum
+
+result_df =sales_df.groupBy('month').pivot("month", ["Jan", "Feb", "Mar"]).agg(sum("amount"))
+result_df.show()
 
 # COMMAND ----------
 
+from pyspark.sql.functions import sum
 
+result_df =sales_df.groupBy('month').pivot("month", ["Jan", "Feb", "Mar"]).agg(sum("amount"))
+result_df.show()
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot(sum(amount) for month in ('Jan','Feb','Mar'))
