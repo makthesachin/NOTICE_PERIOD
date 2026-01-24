@@ -17,6 +17,15 @@
 # | Sales    | M      |
 # | Sales    | F      |
 
+# COMMAND ----------
+
+# +--------+---+----+
+# |DeptName|  F|   M|
+# +--------+---+----+
+# |      IT|  1|   3|
+# |      HR|  5|NULL|
+# |   Sales|  2|   4|
+# +--------+---+----+
 
 # COMMAND ----------
 
@@ -59,6 +68,43 @@ dept_gender_df = spark.createDataFrame(
 )
 
 dept_gender_df.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Cell 5
+from pyspark.sql.functions import count, row_number
+from pyspark.sql.window import Window
+
+w = Window.partitionBy('DeptName','Gender').orderBy('Gender')
+df1 = dept_gender_df.withColumn('row_number_rank', count('Gender').over(w))
+df1.show()
+df2 = df1.groupby('DeptName','Gender').count()
+# df2.show()
+df3 = df2.groupby('DeptName').pivot('Gender').agg(sum('count'))
+df3.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import count
+
+df1 = dept_gender_df.groupBy('DeptName').agg(count('Gender').alias('TotalEmp'))
+display(df1)
+
+# COMMAND ----------
+
+# DBTITLE 1,Untitled
+from pyspark.sql.functions import sum
+
+df1 = dept_gender_df.groupBy('DeptName').agg(sum('Gender'))
+df1.show()
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 
@@ -112,8 +158,3 @@ display(dftotal)
 dftotal = dfgroup.groupby('DeptName').agg(sum('Gender_Counter').alias('Total_Gender_count'))
 display(dfgroup)
 display(dftotal)
-
-# COMMAND ----------
-
-
-

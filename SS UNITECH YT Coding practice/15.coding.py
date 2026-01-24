@@ -53,6 +53,13 @@ emp_skill_df = spark.createDataFrame(
 
 emp_skill_df.show(truncate=False)
 
+# COMMAND ----------
+
+# DBTITLE 1,Untitled
+from pyspark.sql.functions import collect_list, concat_ws
+
+df = emp_skill_df.groupBy('EmpName').agg(concat_ws(',', collect_list('Skills')).alias('Skills'))
+df.show(truncate=False)
 
 # COMMAND ----------
 

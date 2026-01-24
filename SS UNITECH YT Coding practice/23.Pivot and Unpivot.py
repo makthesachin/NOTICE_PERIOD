@@ -21,6 +21,15 @@ student_score_df.show()
 
 # COMMAND ----------
 
+student_score_df.createOrReplaceTempView('df')
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from df pivot(sum(Score) for Subject in ('Math','Science'))
+
+# COMMAND ----------
+
 from pyspark.sql.functions import sum as sum_,col
 
 dfpivot = student_score_df.groupby('Name').pivot('Subject').agg(sum_('Score'))

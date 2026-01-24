@@ -59,6 +59,28 @@ display(df1)
 
 # COMMAND ----------
 
+from pyspark.sql.functions import month, to_date, year, col, day, sum as sum_, lag
+from pyspark.sql.window import Window
+
+df2 = df1.groupby(col('Year_Month')).agg(sum_(col('ItemValue')).alias('sum_month'))
+w = Window.orderBy(col('sum_month'))
+df3 = df2.withColumn('prev_sum_month', lag('sum_month').over(w))\
+    .withColumn('PercentageDiffPrevMonth', ((col('sum_month') - col('prev_sum_month')) / col('sum_month')) * 100)
+
+display(df3)
+
+# COMMAND ----------
+
+from pyspark.sql.functions import month, to_date, year,col,day,sum as sum_
+
+df2 = df1.groupby(col('Year_Month')).agg(sum_(col('ItemValue')).alias('sum_month'))
+w = Window.orderBy(col('sum_month'))
+df3 = df2.withColumn('PercentageDiffPrevMonth',lag('sum_month')over(w))
+
+display(df3)
+
+# COMMAND ----------
+
 from pyspark.sql.functions import month, to_date, year, col, day, sum as sum_, lag, round
 from pyspark.sql.window import Window
 
@@ -73,31 +95,13 @@ display(df3)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import month, to_date, year,col,day,sum as sum_
 
-df2 = df1.groupby(col('Year_Month')).agg(sum_(col('ItemValue')).alias('sum_month'))
-display(df2)
 
 # COMMAND ----------
 
 from pyspark.sql.functions import month,to_date,year
 df = df.withColumn('month',month(to_date("SODate")).withColumn('year',year(to_date("SODate"))))
 df.show()
-
-# COMMAND ----------
-
-from pyspark.sql.functions import col, month, try_to_date
-
-df = df.withColumn(
-    'month',
-    month(
-        try_to_date(
-            col('SODate'),
-            'yyyy-MM-dd'
-        )
-    )
-)
-display(df)
 
 # COMMAND ----------
 
@@ -160,3 +164,7 @@ dfwindow = df.withColumn('ItemValue',row_number().over(WindowSpec).orderBy(col('
 # MAGIC     order by month(to_date(SODate))
 # MAGIC   ) as sum_itemvalue
 # MAGIC from df
+
+# COMMAND ----------
+
+

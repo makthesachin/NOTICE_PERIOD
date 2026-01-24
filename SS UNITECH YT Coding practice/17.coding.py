@@ -30,3 +30,24 @@ phone_df = spark.createDataFrame(
 
 phone_df.show(truncate=False)
 
+
+# COMMAND ----------
+
+from pyspark.sql.functions import split
+
+df = phone_df.withColumn('stdcode', split('phone', '-').getItem(0))\
+    .withColumn('phonenum', split('phone', '-').getItem(1))\
+    .drop('phone')
+df.show()
+
+# COMMAND ----------
+
+df=phone_df.withColumn('stcode',split('phone','-').getItem(0))\
+    .withColumn('phonenum',split('phone','-').getItem(1))\
+    .drop('phone')
+
+df.show()
+
+# COMMAND ----------
+
+
