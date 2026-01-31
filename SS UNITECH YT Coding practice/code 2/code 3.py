@@ -14,6 +14,7 @@
 # |   103 | 3/15/2025 | Travel   |   1800 |
 
 # Output:
+# food and travel
 # | Month   | EmpId | Total_Amount |
 # | ------- | ----: | -----------: |
 # | 2025-01 |   101 |         1200 |
@@ -48,3 +49,33 @@ sales_df = spark.createDataFrame(
 
 sales_df.show()
 
+# COMMAND ----------
+
+from pyspark.sql.functions import to_date, col,year
+from pyspark.sql.functions import concat_ws
+
+df_clean = sales_df.withColumn('Month', concat_ws("-",year(to_date(col('Date'), 'yyyy-MM-dd')),month(to_date(col('Date'), 'yyyy-MM-dd')))).drop('Date')
+df_clean.show(truncate=True)
+
+# COMMAND ----------
+
+
+# Output:
+# food and travel
+# | Month   | EmpId | Total_Amount |
+# | ------- | ----: | -----------: |
+# | 2025-01 |   101 |         1200 |
+# | 2025-01 |   103 |          900 |
+# | 2025-02 |   104 |         1500 |
+# | 2025-02 |   102 |         1300 |
+# | 2025-03 |   102 |         2200 |
+# | 2025-03 |   101 |         2000 |
+
+# COMMAND ----------
+
+# DBTITLE 1,Cell 4
+from pyspark.sql.functions import col
+
+df_group = df_clean.groupby('EmpId','Category','Month').sum('Amount')
+df_group_filter = df_group.filter(col('Category').isin('Travel'))
+df_group_filter.show()

@@ -42,3 +42,13 @@ emp_df = spark.createDataFrame(
 )
 
 emp_df.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+df = emp_df.filter(col('Salary')>=2700)
+df.show(truncate = False)
+
+# COMMAND ----------
+
+

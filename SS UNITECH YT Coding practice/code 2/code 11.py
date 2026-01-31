@@ -55,6 +55,55 @@ data = [
 columns = ["user_id", "date"]
 
 df_users = spark.createDataFrame(data, columns)
+df_users.show(truncate=True)
 
+# COMMAND ----------
 
+from pyspark.sql.functions import *
+from pyspark.sql.window import Window
 
+w = Window.partitionBy()  # whole dataset
+
+df = df_users.withColumn('month', month(to_date('date','yyyy-MM-dd'))) \
+    .groupBy('month') \
+    .agg(count('user_id').alias('user_count')) \
+    .orderBy('month') \
+    .withColumn('perc_change', sum('user_count').over(w)/col('user_count')  * 100)
+
+df.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import *
+from pyspark.sql.window import Window
+
+w = Window.partitionBy()  # whole dataset
+
+df = df_users.withColumn('month', month(to_date('date','yyyy-MM-dd'))) \
+    .groupBy('month') \
+    .agg(count('user_id').alias('user_count')) \
+    .orderBy('month') \
+    .withColumn('perc_change', col('user_count') / sum('user_count').over(w)* 100)
+
+df.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import month, to_date, count
+
+df = df_users.withColumn('month', month(to_date('date', 'yyyy-MM-dd'))) \
+    .groupBy('month') \
+    .agg(count('user_id').alias('user_count')) \
+    .orderBy('month')
+
+df.show()
+
+# COMMAND ----------
+
+# | month | user_count | perc_change |
+# | ----: | ---------: | ----------: |
+# |     1 |          3 |        NULL |
+# |     2 |          4 |       33.33 |
+# |     3 |          3 |      -25.00 |
+# |     4 |          3 |        0.00 |
+# |     5 |          3 |        0.00 |

@@ -57,3 +57,39 @@ score_df = spark.createDataFrame(
 )
 
 score_df.show()
+
+# COMMAND ----------
+
+e = employee_df.alias("e")
+s = score_df.alias('d')
+df_join = e.join(s,e.Employee_Id == s.Employee_Id,'inner')
+df_join = df_join.drop(s.Employee_Id)
+df_join.show(truncate=False)
+
+# COMMAND ----------
+
+# DBTITLE 1,Untitled
+from pyspark.sql.functions import col,sum,count,round
+df_groupby = df_join.groupby('Employee_Id','Employee_Name').agg(round((sum('Score')/count(col('Employee_Id'))/1000*100),2).alias('sum_score'))
+# df_groupby.show()
+df_new = df_groupby.withColumn('Result',when(col('sum_score')>60 then 'sum_score'='second class'),
+                                      when(col('sum_score')>70 then 'sum_score' = 'first class'),
+                                      when(col('sum_score')>80 then 'sum_score' = 'distinction')
+df_new.show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col, sum, count, round, when
+
+df_groupby = df_join.groupby('Employee_Id', 'Employee_Name').agg(
+    round((sum('Score') / count(col('Employee_Id')) / 1000 * 100), 2).alias('sum_score')
+)
+
+df_new = df_groupby.withColumn(
+    'Result',
+    when(col('sum_score') >= 80, 'distinction')
+    .when(col('sum_score') > 70, 'first class')
+    .when(col('sum_score') > 60, 'second class')
+    .otherwise('fail')
+)
+df_new.show()

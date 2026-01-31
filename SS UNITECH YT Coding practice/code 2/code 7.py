@@ -28,3 +28,25 @@ columns = ["customer_id", "order_id", "order_date", "amount"]
 
 df = spark.createDataFrame(data, columns)
 df.show()
+
+# COMMAND ----------
+
+# DBTITLE 1,Untitled
+from pyspark.sql.functions import *
+from pyspark.sql.window import Window
+
+w = Window.partitionBy('customer_id').orderBy(col('Order_date').desc())
+dfwindow = df.withColumn('rank',rank().over(w))
+dfwindow.show(truncate=True)
+
+# COMMAND ----------
+
+# DBTITLE 1,Untitled
+from pyspark.sql.functions import *
+from pyspark.sql.window import Window
+
+w = Window.partitionBy('customer_id').orderBy(col('Order_date').desc())
+dfwindow = df.withColumn('rank',rank().over(w))
+# dfwindow.show(truncate=True)
+dfwindow1 = dfwindow.select('customer_id','order_date').where(col('rank')==1)
+dfwindow1.show()

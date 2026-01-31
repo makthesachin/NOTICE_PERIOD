@@ -7,6 +7,7 @@
 # | NULL     | NULL     | China    |
 
 # Output
+
 # | Country |
 # | ------- |
 # | India   |
@@ -26,4 +27,9 @@ columns = ["Country1", "Country2", "Country3"]
 df = spark.createDataFrame(data, columns)
 df.show()
 
+# COMMAND ----------
 
+# DBTITLE 1,Untitled
+from pyspark.sql.functions import coalesce
+df1 = df.select(coalesce('Country1','Country2','Country3').alias('Country'))
+df1.show(truncate=False)

@@ -1,4 +1,5 @@
 # Databricks notebook source
+# It duplicate question i.e code 7- can be skipped
 # | customer_id | order_id | order_date | amount |
 # | ----------- | -------- | ---------- | ------ |
 # | 101         | A001     | 2024-01-10 | 250    |
