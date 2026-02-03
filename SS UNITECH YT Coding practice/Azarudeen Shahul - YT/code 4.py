@@ -35,3 +35,7 @@ data = [
 
 df_raw = spark.createDataFrame(data, ["value"])
 df_raw.show(truncate=False)
+
+# COMMAND ----------
+
+

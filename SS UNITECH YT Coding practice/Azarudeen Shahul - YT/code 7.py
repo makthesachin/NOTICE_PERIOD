@@ -30,10 +30,6 @@
 # df2 = df1.filter("x")
 # df2.count()
 
-
-
-
-
 # COMMAND ----------
 
 from pyspark.sql import Row

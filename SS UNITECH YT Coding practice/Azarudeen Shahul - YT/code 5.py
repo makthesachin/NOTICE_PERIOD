@@ -1,7 +1,7 @@
 # Databricks notebook source
 # Q5 – Problem Statement
 
-# Given a CSV file, compare the output of map vs flatMap and find the result of .count().
+# Given a CSV file, compare the output of map vs flatMap and find the result of count().
 
 # Input
 # 101,Azar,finance
@@ -19,7 +19,6 @@
 # map_rdd.count()
 
 
-
 data = [
     ("101,Azar,finance",),
     ("102,Mani,HR",),
@@ -28,5 +27,3 @@ data = [
 
 df = spark.createDataFrame(data, ["value"])
 df.show(truncate=False)
-
-
