@@ -30,8 +30,6 @@
 # | Flintoff, David   | 12  |
 # | Adam, James       | 20  |
 
-
-
 # COMMAND ----------
 
 raw_data = [
@@ -90,7 +88,3 @@ df_final = (
 
 df_final.show(truncate=False)
 df_final.printSchema()
-
-# COMMAND ----------
-
-
